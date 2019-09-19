@@ -57,4 +57,7 @@ switch($TGBot->cbdata_text){
         $TGBot->cb_parla_procedi();
         break;
 
+    case '/paysafe':
+        $TGBot->cb_paysafe();
+        break;
 }

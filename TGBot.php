@@ -819,7 +819,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $update = $this->mdb->prepare("UPDATE $this->table_name SET ticket=?, ticket_number=?, rep_video=?, rep_online=?, rep_mod=? WHERE chat_id=?");
                 $update->execute(['false', null, 'false', 'false', 'false', $this->chat_id]);
                 $this->getUpdate();
@@ -860,7 +860,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $readopen = fopen('./tickets.txt', 'r');
                 $a = fgets($readopen);
                 $a;
@@ -874,9 +874,9 @@ class TGBot
                 $check = $check->fetch(\PDO::FETCH_ASSOC);
                 $check = $check['nickname'];
                 if($this->username != null) {
-                    $this->sendMessage(-1001293009113, "📌 NUOVO VIDEO REPORT (CHEAT)!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nLINK: $this->text");
+                    $this->sendMessage(-1001293009113, "📌 NUOVO VIDEO REPORT (CHEAT)!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nLink: $this->text");
                 } else {
-                    $this->sendMessage(-1001293009113, "📌 NUOVO VIDEO REPORT (CHEAT)!\n\nDA: <code>$check</code>\n\nINFO: [<code>$this->chat_id</code>]\n\nLINK: $this->text");
+                    $this->sendMessage(-1001293009113, "📌 NUOVO VIDEO REPORT (CHEAT)!\n\nDa: <code>$check</code>\n\nInfo: [<code>$this->chat_id</code>]\n\nLink: $this->text");
                 }
                 $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_video=? WHERE chat_id=?");
                 $update->execute(['false', $this->chat_id]);  
@@ -911,7 +911,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $readopen = fopen('./tickets.txt', 'r');
                 $a = fgets($readopen);
                 $a;
@@ -962,7 +962,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 die();
             } else {
                 $this->sendMessage($this->chat_id, "📮 Ticket aperto, attendi la risposta di uno staffer.");
@@ -984,7 +984,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $readopen = fopen('./ticketaperti.txt', 'r');
                 $a = fgets($readopen);
                 $a;
@@ -1103,7 +1103,7 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $readopen = fopen('./tickets.txt', 'r');
                 $a = fgets($readopen);
                 $a;
@@ -1148,7 +1148,7 @@ class TGBot
                             'callback_data' => '/info',
                         ],
                     ];
-                    $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                    $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                     $readopen = fopen('./tickets.txt', 'r');
                     $a = fgets($readopen);
                     $a;
@@ -1162,9 +1162,9 @@ class TGBot
                     $check = $check->fetch(\PDO::FETCH_ASSOC);
                     $check = $check['nickname'];
                     if($this->username != null) {
-                        $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>MINI-PRISON</b>");
+                        $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>MINI-PRISON</b>");
                     } else {
-                        $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>MINI-PRISON</b>");
+                        $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>MINI-PRISON</b>");
                     }
                     $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_online=?, rep_mod=? WHERE chat_id=?");
                     $update->execute(['false', null, $this->chat_id]); 
@@ -1193,7 +1193,7 @@ class TGBot
                                 'callback_data' => '/info',
                             ],
                         ];
-                        $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                        $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                         $readopen = fopen('./tickets.txt', 'r');
                         $a = fgets($readopen);
                         $a;
@@ -1207,9 +1207,9 @@ class TGBot
                         $check = $check->fetch(\PDO::FETCH_ASSOC);
                         $check = $check['nickname'];
                         if($this->username != null) {
-                            $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FARM-PVP</b>");
+                            $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FARM-PVP</b>");
                         } else {
-                            $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FARM-PVP</b>");
+                            $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FARM-PVP</b>");
                         }
                         $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_online=?, rep_mod=? WHERE chat_id=?");
                         $update->execute(['false', null, $this->chat_id]);   
@@ -1238,7 +1238,7 @@ class TGBot
                                     'callback_data' => '/info',
                                 ],
                             ];
-                            $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                            $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                             $readopen = fopen('./tickets.txt', 'r');
                             $a = fgets($readopen);
                             $a;
@@ -1252,9 +1252,9 @@ class TGBot
                             $check = $check->fetch(\PDO::FETCH_ASSOC);
                             $check = $check['nickname'];
                             if($this->username != null) {
-                                $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>HUB</b>");
+                                $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>HUB</b>");
                             } else {
-                                $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDA: <code>$check</code>\n\nINFO: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>HUB</b>");
+                                $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>HUB</b>");
                             }
                             $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_online=?, rep_mod=? WHERE chat_id=?");
                             $update->execute(['false', null, $this->chat_id]);   
@@ -1277,6 +1277,13 @@ class TGBot
                 $this->getUpdate();
                 die();
             } else {
+                $check = $this->mdb->prepare("SELECT chat_id FROM $this->table_name WHERE nickname=?");
+                $check->execute([$e1]);
+                $check = $check->fetch(\PDO::FETCH_ASSOC);
+                if($check) {
+                    $this->sendMessage($this->chat_id, "Questo nickname è già stato registrato!");
+                    die();
+                }
                 $this->sendMessage($this->chat_id, "Ok! Ti ho registrato come:  <code>$e1</code>.");
                 $buttons[] = [
                     [
@@ -1296,14 +1303,14 @@ class TGBot
                         'callback_data' => '/info',
                     ],
                 ];
-                $this->sendMessage($this->chat_id, "TODO: Paysafecard", $buttons);
+                $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_video=?, rep_online=?, rep_mod=?, nickname=? WHERE chat_id=?");
                 $update->execute(['false', 'false', 'false', $e1, $this->chat_id]);
                 $this->getUpdate();
                 die();
             }
         } else {
-            $this->sendMessage($this->chat_id, 'Inserisci un nickname valido! (<code>/nick [nome]</code>)');
+            $this->sendMessage($this->chat_id, 'Inserisci un nickname valido usando <code>/nick [nome]</code>!');
             $this->getUpdate();
             die();
         } 
@@ -1757,7 +1764,7 @@ public function unstaffer(){
                 'callback_data' => '/info',
             ],
         ]; 
-        $this->editMessage($this->chat_id, $this->message_id, "TODO: Paysafecard", $buttons);
+        $this->editMessage($this->chat_id, $this->message_id, "Non so che scrivere qui plz help", $buttons);
         $update = $this->mdb->prepare("UPDATE $this->table_name SET rep_bugabusing=?, ticket=?, rep_video=?, rep_online=?, rep_mod=? WHERE chat_id=?");
         $update->execute(['false', 'false', 'false', 'false', null, $this->chat_id]);
     }
@@ -1781,7 +1788,7 @@ public function unstaffer(){
                 'callback_data' => '/info',
             ],
         ]; 
-        $this->editMessage($this->chat_id, $this->message_id, "TODO: Paysafecard", $buttons);
+        $this->editMessage($this->chat_id, $this->message_id, "Non so che scrivere qui plz help", $buttons);
     }
 
     public function cb_ticket() {
@@ -2162,7 +2169,8 @@ public function unstaffer(){
         }
     }
 
-    public function paysafe() {
+    public function cb_paysafe() {
+        $this->sendMessage($this->chat_id, 'Funzione non disponibile...');
         /*  
              Lista buycraft (?)
              Si sceglie cosa prendere (?)
