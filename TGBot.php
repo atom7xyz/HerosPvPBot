@@ -1021,7 +1021,7 @@ class TGBot
                 $ex = explode(' ', $this->text, 2);
                 $e = $ex[1];
                 $this->sendMessage($this->chat_id, "✉️ Risposta allo staffer inviata (<code>$num</code>).");
-                $this->sendMessage(-1001293009113, "📬 NUOVA TICKET RISPOSTA!\n\nNumero:  <code>$num</code>\n\n<code>$nick</code> scrive:\n\n<i>$e</i>");
+                $this->sendMessage(-1001293009113, "📬 NUOVA RISPOSTA!\n\nTicket:  <code>$num</code>\n\n<code>$nick</code> scrive:\n\n<i>$e</i>");
                 $this->getUpdate();
                 die();
             }
@@ -1039,7 +1039,7 @@ class TGBot
                 $id = $id->fetch(\PDO::FETCH_ASSOC);
                 $id = $id['chat_id'];
                 $this->sendMessage($this->chat_id, "✉️ Risposta al ticket  <code>$numero</code>  inviata.\n\nPer chiudere il ticket scrivi  <code>/c $numero</code>");
-                $this->sendMessage($id, "✉️ <code>$nick</code> scrive:\n\n<i>$risposta</i>");
+                $this->sendMessage($id, "✉️ <code>$nick</code> scrive:\n\n<i>$risposta</i>\n\n<b>Per rispondere allo staffer usa</b> <code>/r [testo]</code>.");
                 $this->getUpdate();
                 die();
             } else {
