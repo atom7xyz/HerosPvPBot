@@ -861,11 +861,11 @@ class TGBot
                     ],
                 ];
                 $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                $readopen = fopen('./tickets.txt', 'r');
+                $readopen = fopen('./reportcount.txt', 'r');
                 $a = fgets($readopen);
                 $a;
                 fclose($readopen);
-                $writeopen = fopen('./tickets.txt', 'w');
+                $writeopen = fopen('./reportcount.txt', 'w');
                 $c = $a + 1;
                 $b = fwrite($writeopen, "$c");
                 fclose($writeopen); 
@@ -912,11 +912,11 @@ class TGBot
                     ],
                 ];
                 $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                $readopen = fopen('./tickets.txt', 'r');
+                $readopen = fopen('./reportcount.txt', 'r');
                 $a = fgets($readopen);
                 $a;
                 fclose($readopen);
-                $writeopen = fopen('./tickets.txt', 'w');
+                $writeopen = fopen('./reportcount.txt', 'w');
                 $c = $a + 1;
                 $b = fwrite($writeopen, "$c");
                 fclose($writeopen); 
@@ -965,7 +965,8 @@ class TGBot
                 $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
                 die();
             } else {
-                $this->sendMessage($this->chat_id, "📮 Ticket aperto, attendi la risposta di uno staffer.");
+                $rand = rand(1, 10000);
+                $this->sendMessage($this->chat_id, "📮 Ticket (<code>$rand</code>) aperto, attendi la risposta di uno staffer.");
                 $buttons[] = [
                     [
                         'text'          => 'TICKET',
@@ -985,23 +986,22 @@ class TGBot
                     ],
                 ];
                 $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                $readopen = fopen('./ticketaperti.txt', 'r');
+                $readopen = fopen('./ticketcount.txt', 'r');
                 $a = fgets($readopen);
                 $a;
                 fclose($readopen);
-                $writeopen = fopen('./ticketaperti.txt', 'w');
+                $writeopen = fopen('./ticketcount.txt', 'w');
                 $c = $a + 1;
                 $b = fwrite($writeopen, "$c");
                 fclose($writeopen); 
-                $rand = rand(1, 10000);
                 $check = $this->mdb->prepare("SELECT nickname FROM $this->table_name WHERE chat_id=?");
                 $check->execute([$this->chat_id]);
                 $check = $check->fetch(\PDO::FETCH_ASSOC);
                 $check = $check['nickname'];
                 if($this->username != null) {
-                    $this->sendMessage(-1001293009113, "📬 NUOVO TICKET!\n\nDa: <code>$check</code>\n\nTesto: <i>\"$this->text\"</i>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nPER RISPONDERE AL TICKET SCRIVI: \n<code>/r $rand </code> [RISPOSTA]");
+                    $this->sendMessage(-1001293009113, "📬 NUOVO TICKET (<code>$rand</code>)!\n\nDa: <code>$check</code>\n\nInfo: @$this->username  [<code>$this->chat_id</code>]\n\n<i>\"$this->text\"</i>\n\nPER RISPONDERE AL TICKET SCRIVI: \n<code>/r $rand </code> [RISPOSTA]");
                 } else {
-                    $this->sendMessage(-1001293009113, "📬 NUOVO TICKET!\n\nDa: <code>$check</code>\n\nTesto: <i>\"$this->text\"</i>\n\nInfo: [<code>$this->chat_id</code>]\n\nPER RISPONDERE AL TICKET SCRIVI: \n<code>/r $rand </code> [RISPOSTA]");
+                    $this->sendMessage(-1001293009113, "📬 NUOVO TICKET (<code>$rand</code>)!\n\nDa: <code>$check</code>\n\nInfo: [<code>$this->chat_id</code>]\n\n<i>\"$this->text\"</i>\n\nPER RISPONDERE AL TICKET SCRIVI: \n<code>/r $rand </code> [RISPOSTA]");
                 }
                 $update = $this->mdb->prepare("UPDATE $this->table_name SET ticket=?, ticket_number=? WHERE chat_id=?");
                 $update->execute(['false', $rand, $this->chat_id]);  
@@ -1012,6 +1012,19 @@ class TGBot
 
     public function rispondiTicket() {
         if(stripos($this->text, '/r')=== 0){
+            $reply = $this->mdb->prepare("SELECT ticket_number, nickname FROM $this->table_name WHERE chat_id=?");
+            $reply->execute([$this->chat_id]);
+            $reply = $reply->fetch(\PDO::FETCH_ASSOC);
+            if($reply) {
+                $num = $reply['ticket_number'];
+                $nick = $reply['nickname'];
+                $ex = explode(' ', $this->text, 2);
+                $e = $ex[1];
+                $this->sendMessage($this->chat_id, "✉️ Risposta allo staffer inviata (<code>$num</code>).");
+                $this->sendMessage(-1001293009113, "📬 NUOVA TICKET RISPOSTA!\n\nNumero:  <code>$num</code>\n\n<code>$nick</code> scrive:\n\n<i>$e</i>");
+                $this->getUpdate();
+                die();
+            }
             $this->staffCheck();
             $nick = $this->mdb->prepare("SELECT * FROM $this->table_name WHERE chat_id=? AND is_staff=?");
             $nick->execute([$this->user_id, 'true']);
@@ -1026,7 +1039,7 @@ class TGBot
                 $id = $id->fetch(\PDO::FETCH_ASSOC);
                 $id = $id['chat_id'];
                 $this->sendMessage($this->chat_id, "✉️ Risposta al ticket  <code>$numero</code>  inviata.\n\nPer chiudere il ticket scrivi  <code>/c $numero</code>");
-                $this->sendMessage($id, "✉️ <code>$nick</code> scrive:\n\n\"$risposta\"");
+                $this->sendMessage($id, "✉️ <code>$nick</code> scrive:\n\n<i>$risposta</i>");
                 $this->getUpdate();
                 die();
             } else {
@@ -1104,11 +1117,11 @@ class TGBot
                     ],
                 ];
                 $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                $readopen = fopen('./tickets.txt', 'r');
+                $readopen = fopen('./reportcount.txt', 'r');
                 $a = fgets($readopen);
                 $a;
                 fclose($readopen);
-                $writeopen = fopen('./tickets.txt', 'w');
+                $writeopen = fopen('./reportcount.txt', 'w');
                 $c = $a + 1;
                 $b = fwrite($writeopen, "$c");
                 fclose($writeopen); 
@@ -1149,11 +1162,11 @@ class TGBot
                         ],
                     ];
                     $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                    $readopen = fopen('./tickets.txt', 'r');
+                    $readopen = fopen('./reportcount.txt', 'r');
                     $a = fgets($readopen);
                     $a;
                     fclose($readopen);
-                    $writeopen = fopen('./tickets.txt', 'w');
+                    $writeopen = fopen('./reportcount.txt', 'w');
                     $c = $a + 1;
                     $b = fwrite($writeopen, "$c");
                     fclose($writeopen); 
@@ -1194,11 +1207,11 @@ class TGBot
                             ],
                         ];
                         $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                        $readopen = fopen('./tickets.txt', 'r');
+                        $readopen = fopen('./reportcount.txt', 'r');
                         $a = fgets($readopen);
                         $a;
                         fclose($readopen);
-                        $writeopen = fopen('./tickets.txt', 'w');
+                        $writeopen = fopen('./reportcount.txt', 'w');
                         $c = $a + 1;
                         $b = fwrite($writeopen, "$c");
                         fclose($writeopen); 
@@ -1239,11 +1252,11 @@ class TGBot
                                 ],
                             ];
                             $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
-                            $readopen = fopen('./tickets.txt', 'r');
+                            $readopen = fopen('./reportcount.txt', 'r');
                             $a = fgets($readopen);
                             $a;
                             fclose($readopen);
-                            $writeopen = fopen('./tickets.txt', 'w');
+                            $writeopen = fopen('./reportcount.txt', 'w');
                             $c = $a + 1;
                             $b = fwrite($writeopen, "$c");
                             fclose($writeopen); 
@@ -1724,12 +1737,12 @@ public function unstaffer(){
 }
 
     public function cb_info() {
-        $readopen = fopen('./tickets.txt', 'r');
+        $readopen = fopen('./reportcount.txt', 'r');
         $a = fgets($readopen);
         $a;
         fclose($readopen);
     
-        $readopen = fopen('./ticketaperti.txt', 'r');
+        $readopen = fopen('./ticketcount.txt', 'r');
         $b = fgets($readopen);
         $b;
         fclose($readopen);
