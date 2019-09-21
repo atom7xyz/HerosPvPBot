@@ -1129,6 +1129,8 @@ class TGBot
                 $check->execute([$this->chat_id, 'true']);
                 $check = $check->fetch(\PDO::FETCH_ASSOC);
                 $check = $check['nickname'];
+                $ex = explode(' ', $this->text, 1);
+                $e = $ex[0];
                 if($this->username != null) {
                     $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FAZIONI</b>");
                 } else {
@@ -1174,6 +1176,8 @@ class TGBot
                     $check->execute([$this->chat_id, 'true']);
                     $check = $check->fetch(\PDO::FETCH_ASSOC);
                     $check = $check['nickname'];
+                    $ex = explode(' ', $this->text, 1);
+                    $e = $ex[0];
                     if($this->username != null) {
                         $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>MINI-PRISON</b>");
                     } else {
@@ -1219,6 +1223,8 @@ class TGBot
                         $check->execute([$this->chat_id, 'true']);
                         $check = $check->fetch(\PDO::FETCH_ASSOC);
                         $check = $check['nickname'];
+                        $ex = explode(' ', $this->text, 1);
+                        $e = $ex[0];
                         if($this->username != null) {
                             $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>FARM-PVP</b>");
                         } else {
@@ -1264,6 +1270,8 @@ class TGBot
                             $check->execute([$this->chat_id, 'true']);
                             $check = $check->fetch(\PDO::FETCH_ASSOC);
                             $check = $check['nickname'];
+                            $ex = explode(' ', $this->text, 1);
+                            $e = $ex[0];
                             if($this->username != null) {
                                 $this->sendMessage(-1001293009113, "📌 NUOVO IN-GAME REPORT!\n\nDa: <code>$check</code>\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\nCheater:  <code>$e</code>\n\nModalità:  <b>HUB</b>");
                             } else {
