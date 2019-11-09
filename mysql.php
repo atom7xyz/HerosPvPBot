@@ -20,6 +20,8 @@ if($TGBot->settings['adminMySQL']){
             rep_online TEXT(50),
             rep_mod TEXT(50),
             rep_bugabusing TEXT(50),
+            paysafe TEXT(50),
+            paysafecode TEXT(50),
             title TEXT(255),
             type TEXT(50),
             to_update TEXT(50)
@@ -33,8 +35,8 @@ if($TGBot->settings['adminMySQL']){
         $la->execute([$TGBot->chat_id]);
         $la = $la->fetch(\PDO::FETCH_ASSOC);
         if($TGBot->chat_id != $la['chat_id']){
-            $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertprep->execute([$TGBot->chat_id, null, null, null, '?', '?',  'false', 'false', 'false', null, null, 'false', 'false', null, 'false', $filtro3, $TGBot->type, true]);
+            $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, paysafe, paysafecode, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertprep->execute([$TGBot->chat_id, null, null, null, '?', '?',  'false', 'false', 'false', null, null, 'false', 'false', null, 'false', 'false', null, $filtro3, $TGBot->type, true]);
         } else {
             if($la['to_update']){
                 $update = $TGBot->mdb->prepare("UPDATE $TGBot->table_name SET title=?, type=?, to_update=? WHERE chat_id=?");
@@ -45,8 +47,8 @@ if($TGBot->settings['adminMySQL']){
         $user = $user->fetch(\PDO::FETCH_ASSOC);
         if(!$user){
             if($TGBot->user_id != $user['chat_id']){
-                $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $insertprep->execute([$TGBot->user_id, $filtro1, $filtro2, $TGBot->username, '?', '?', 'false', 'false', 'false', null, null, 'false', 'false', null, 'false', null, 'private', true]);
+                $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, paysafe, paysafecode, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $insertprep->execute([$TGBot->user_id, $filtro1, $filtro2, $TGBot->username, '?', '?', 'false', 'false', 'false', null, null, 'false', 'false', null, 'false', 'false', null, null, 'private', true]);
                 if($TGBot->username != null){
                     if($TGBot->chat_id == $TGBot->user_id){
                         $TGBot->sendMessage(-1001261566482, "Registrazione nel database:  \n\n[<code>$TGBot->username</code> → <code>$TGBot->user_id</code>] \n\n💾    →    ✅");
@@ -72,8 +74,8 @@ if($TGBot->settings['adminMySQL']){
         $user = $user->fetch(\PDO::FETCH_ASSOC);
         if(!$user){
             if($TGBot->user_id != $user['chat_id']){
-                $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $insertprep->execute([$TGBot->user_id, $filtro1, $filtro2, $TGBot->username, '?', '?', 'false', 'false', 'false', null, null, 'false', 'false', null, 'false', null, 'private', true]);
+                $insertprep = $TGBot->mdb->prepare("INSERT INTO $TGBot->table_name (chat_id, first_name, last_name, username, ban, first_start, is_admin, is_staff, ticket, ticket_number, nickname, rep_video, rep_online, rep_mod, rep_bugabusing, paysafe, paysafecode, title, type, to_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $insertprep->execute([$TGBot->user_id, $filtro1, $filtro2, $TGBot->username, '?', '?', 'false', 'false', 'false', null, null, 'false', 'false', null, 'false', 'false', null, null, 'private', true]);
                 if($TGBot->username != null){
                     if($TGBot->chat_id == $TGBot->user_id){
                         $TGBot->sendMessage(-1001261566482, "Registrazione nel database:  \n\n[<code>$TGBot->username</code> → <code>$TGBot->user_id</code>] \n\n💾    →    ✅");

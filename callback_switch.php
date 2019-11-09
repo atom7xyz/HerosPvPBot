@@ -60,4 +60,10 @@ switch($TGBot->cbdata_text){
     case '/paysafe':
         $TGBot->cb_paysafe();
         break;
+    case '/paysafeprocedi':
+        $TGBot->cb_paysafe_procedi();
+        break;
+    case '/tos':
+        $TGBot->cb_accetta_tos();
+        break;
 }

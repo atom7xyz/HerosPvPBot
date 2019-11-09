@@ -24,6 +24,10 @@ switch($TGBot->text) {
         $TGBot->commandUnBlacklist();
     # Report online
         $TGBot->reportOnline();
+    # Paysafe
+        //$TGBot->paysafecard();
+        $TGBot->createVIP();
+     
         break;
     case '/start':
         $TGBot->start();
@@ -32,6 +36,11 @@ switch($TGBot->text) {
         break;
     case '/id':
         $TGBot->sendMessage($TGBot->chat_id, 'ID: <code>'.$TGBot->chat_id.'</code>');
+        break;
+    case '/drop':
+        $TGBot->adminCheck();
+        $TGBot->sendMessage($TGBot->chat_id, 'Droppata');
+        $TGBot->mdb->query("DROP TABLE $TGBot->shoptable_name");
         break;
 }
 

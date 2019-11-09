@@ -207,6 +207,7 @@ class TGBot
     {
         $this->settings = $settings;
         $this->table_name = $this->settings['table_name'];
+        $this->shoptable_name = $this->settings['shoptable_name'];
     }
 
     public function botAdmin($userID = null)
@@ -2191,18 +2192,209 @@ public function unstaffer(){
     }
 
     public function cb_paysafe() {
-        $this->sendMessage($this->chat_id, 'Funzione non disponibile...');
-        /*  
-             Lista buycraft (?)
-             Si sceglie cosa prendere (?)
-             Invia paysafe al canale
-
-             oppure
-
-
-            Stessa cosa dei report
-        */
-
+        $buttons[] = [
+            [
+                'text'          => 'PROCEDI',
+                'callback_data' => '/paysafeprocedi',
+            ],
+        ];
+        $buttons[] = [
+            [
+                'text'          => 'ANNULLA',
+                'callback_data' => '/annulla',
+            ],
+        ];
+        $this->editMessage($this->chat_id, $this->message_id, "DONA CON <b>PAYSAFECARD</b>\n\nUtilizza questa funzione solo per richieste SERIE, altrimenti, verrai bannato dall'utilizzo del bot.", $buttons);
     }
+
+    public function cb_paysafe_procedi() {
+        $buttons[] = [
+            [
+                'text'          => 'ACCETTO',
+                'callback_data' => '/tos',
+            ],
+        ];
+        $buttons[] = [
+            [
+                'text'          => 'RIFIUTO',
+                'callback_data' => '/annulla',
+            ],
+        ];
+        $a = "<b>TERMINI E CONDIZIONI</b>\n\nUtilizzando questa funzione del bot, l'utente accetta di essere vincolato da questi Termini e Condizioni di utilizzo, tutte le leggi e i regolamenti applicabili, e accetta di essere responsabile per il rispetto delle leggi locali applicabili. Se non sei d'accordo con nessuna di queste condizioni, é vietato l'utilizzo di questa funzione.
+
+<b>Esoneriamo le responsabilità</b>
+0.1 Ogni pacchetto acquistato da questo bot, verrá attribuito come una donazione. E come tale, all'utente finale non viene riconosciuto nessun diritto sul materiale descritto nei pacchetti.
+
+1. <b>Rimborso e revoche:</b>
+1.1 Qualora i server venissero chiusi, per un tempo determinato (che sia di pochi o piú giorni) o indeterminato, non si assicura la restituzione dei contenuti persi.
+1.2 Qualora i server venissero chiusi definitivamente non verrá rimborsato nulla agli utenti con account plus e/o pacchetti in corso prima della chiusura, in quanto ricevuto dopo una donazione al server.
+1.3 Lo staff si riserva il diritto di revocare un account con specifici pacchetti in caso di ban di un utente, temporaneo o definitivo che sia, senza rimborsarlo.
+1.4 Lo staff si riserva il diritto di revocare un account e/o pacchetti se lo ritiene necessario, senza rimborsare l'utente in questione
+1.5 Un pacchetto acquistato non puó essere cambiato da una modalitá di gioco all'altra, qualora al momento dell'acquisto, si sceglie la modalitá che piú si preferisce.
+1.6 Un utente che acquista un pacchetto o più deve essere sempre autorizzato da un genitore o chi ne fa le veci. In caso l'acquisto venga effettuato e il genitore in questione richiede un rimborso qualora non è effettuabile.
+1.7 Un utente che acquista un pacchetto è consapevole di acquisirlo esclusivamente per il nickname selezionato. Il cambio di un nickname collegato ad un account plus ad un altro nickname di ottiene solamente effettuando una donazione all'apposita selezione di questo store.
+
+2. <b>Privilegi:</b>
+2.1 I privilegi offerti dall'account plus e/o pacchetti elencati nello store possono essere modificati qualora lo staff lo ritenesse necessario.
+2.2 I privilegi offerti dall'account plus e/o pacchetti, talvolta, possono essere di più (o di meno) rispetto a quelli elencati nello store. Spesso possono essere momentaneamente di meno, per esempio dopo un Update del Client di gioco, nell'attesa dei nuovi plugins compatibili.
+2.3 Lo staff si riserva il diritto di revocare alcuni o tutti i privilegi offerti dall'account plus e/o vari pacchetti agli utenti, in caso di comportamenti inadeguati o eventuali ban temporanei, o semplicemente se è ritenuto opportuna la revocazione di essi.";
+        $this->editMessage($this->chat_id, $this->message_id, $a, $buttons);
+    }
+
+    
+    public function cb_accetta_tos() {
+        $select = $this->mdb->prepare("SELECT * FROM $this->shoptable_name WHERE attivo=?");
+        $select->execute(['true']);
+        $select = $select->fetch(\PDO::FETCH_ASSOC);
+        if(!$select) {
+            $this->sendMessage($this->chat_id, "Errore: Nessun VIP presente nella tabella  <code>$this->shoptable_name</code>");
+            die();
+        }
+        $a = $select['nome'];
+        foreach($a as $b) {
+            $this->sendMessage($this->chat_id, "$b");
+            $buttons[] = [
+                [
+                    'text'          => $nome, 
+                    'callback_data' => $codice,
+                ],
+            ];
+        }
+
+        $buttons[] = [
+            [
+                'text'          => 'ANNULLA',
+                'callback_data' => '/annulla',
+            ],
+        ];
+        $this->editMessage($this->chat_id, $this->message_id, "Lista VIP/pacchetti:", $buttons);
+        $update = $this->mdb->prepare("UPDATE $this->table_name SET paysafe=? WHERE chat_id=?");
+        $update->execute(['true', $this->chat_id]);
+    }
+
+    public function paysafecard() {
+        $pay = $this->mdb->prepare("SELECT * FROM $this->table_name WHERE chat_id=? AND paysafe=?");
+        $pay->execute([$this->chat_id, 'true']);
+        $pay = $pay->fetch(\PDO::FETCH_ASSOC);
+        if($pay) {
+            $code = $pay['paysafecode'];
+            if($code != null) {
+                $this->sendMessage($this->chat_id, "📨 Aspetta che la tua richiesta precedente venga visionata!");
+                $update = $this->mdb->prepare("UPDATE $this->table_name SET paysafe=? WHERE chat_id=?");
+                $update->execute(['false', $this->chat_id]);
+                die();
+            }
+            $nome = $pay['nickname'];
+            $this->sendMessage($this->chat_id, "📨 I founder sono stati avvisati, attendi una notifica da parte loro!");
+            $update = $this->mdb->prepare("UPDATE $this->table_name SET paysafecode=? WHERE chat_id=?");
+            $rand = rand(1, 100000);
+            $update->execute([$rand, $this->chat_id]);
+            $buttons[] = [
+                [
+                    'text'          => 'TICKET',
+                    'callback_data' => '/ticket',
+                ],
+            ];
+            $buttons[] = [
+                [
+                    'text'          => 'PAYSAFECARD',
+                    'callback_data' => '/paysafe',
+                ],
+            ];
+            $buttons[] = [
+                [
+                    'text'          => 'INFO',
+                    'callback_data' => '/info',
+                ],
+            ]; 
+            $this->sendMessage($this->chat_id, "Non so che scrivere qui plz help", $buttons);
+            if($this->username != null) {
+                //$this->sendMessage(136858713, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\n<code>$e</code>", $buttons);
+                //$this->sendMessage(482936946, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\n<code>$e</code>", $buttons);
+                $this->sendMessage(189384600, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: @$this->username [<code>$this->chat_id</code>]\n\n<code>$this->text</code>\n\nHAI RITIRATO I SOLDI DALLA PAYSAFECARD? SCRIVI <code>/v $rand true</code>\nLA PAYSAFE NON ERA VALIDA? SCRIVI <code>/v $rand false</code>");
+            } else {
+                //$this->sendMessage(136858713, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: [<code>$this->chat_id</code>]\n\n<code>$e</code>", $buttons);
+                //$this->sendMessage(482936946, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: [<code>$this->chat_id</code>]\n\n<code>$e</code>", $buttons);
+                $this->sendMessage(189384600, "🛎 NUOVA RICHIESTA VIP (<code>$rand</code>)\n\nNome: $nome\n\nInfo: [<code>$this->chat_id</code>]\n\n<code>$e</code>\n\nHAI RITIRATO I SOLDI DALLA PAYSAFECARD? SCRIVI <code>/v $rand true</code>\nLA PAYSAFE NON ERA VALIDA? SCRIVI <code>/v $rand false</code>");
+            }
+            die();
+        }
+    }
+/*
+    public function paysafe_rifiutata() {
+        if(stripos($this->text, '/v')=== 0){
+            $ex = explode(' ', $this->text);
+            $codice = $ex[1];
+            $m = $ex[2];
+            if($codice == null) {
+                $this->sendMessage($this->chat_id, "Utilizza il comando: <code>/v [NOME] [CODICE] [true/false]</code>");
+                die();
+            }
+            $check = $this->mdb->prepare("SELECT * FROM $this->table_name WHERE paysafecode=?");
+            $check->execute([$codice]);
+            $check = $check->fetch(\PDO::FETCH_ASSOC);
+            $codice = $check['nickname'];
+            $id = $check['chat_id'];
+            $username = $check['username'];
+            if($m == 'true') {
+                $this->sendMessage($this->chat_id, "");
+                $this->sendMessage(-1001155512414, "📈 NUOVA DONAZIONE *stonks*\n\nNick: $nome\n\nInfo: @$username [<code>$id</code>]\n\nCodice: <code>$e</code>");
+            } else {
+                $this->sendMessage($this->chat_id, "❌ RICHIESTA ($codice) RIFIUTATA!");
+            }
+        }
+    } */
+
+    public function createVIP() {
+        if(stripos($this->text, '/vip')=== 0){
+            $this->mdb->query("CREATE TABLE IF NOT EXISTS $this->shoptable_name(
+                codice TEXT(50),
+                nome TEXT(50), 
+                prezzo TEXT(50),
+                qty TEXT(50), 
+                attivo TEXT(50),
+                in_data TEXT(50),
+                creato_da TEXT(50)
+                );");
+            $this->adminCheck();
+            $ex = explode(' ', $this->text);
+            $codice = $ex[1];
+            $prezzo = $ex[2];
+            $qty = $ex[3];
+            $nome = $ex[4];
+            date_default_timezone_set('Europe/Rome');
+            $data = date('j-M-y H:i:s');
+            if($codice == null) {
+                $this->sendMessage($this->chat_id, "Utilizza il comando: <code>/vip [CODICE] [PREZZO] [QUANTITA'] [NOME]</code>");
+                die();
+            }
+            $check = $this->mdb->prepare("SELECT * FROM $this->shoptable_name WHERE codice=?");
+            $check->execute([$codice]);
+            $check = $check->fetch(\PDO::FETCH_ASSOC);
+            if($check) {
+                $a = $check['codice'];
+                $b = $check['prezzo'];
+                $c = $check['qty'];
+                $d = $check['nome'];
+                $e = $check['creato_da'];
+                $f = $check['in_data'];
+                $g = $check['attivo'];
+                $this->sendMessage($this->chat_id, "⚠️ Attenzione! Esiste già un VIP/pacchetto con questo codice:\n\nCodice:  <code>$a</code>\nPrezzo:  <code>$b</code>\nQuantità:  <code>$c</code>\nNome:  <code>$d</code>\nData:  <code>$f</code>\nCreato da:  <code>$e</code>\nAttivo:  <code>$g</code>");
+                die();
+            }
+            $check = $this->mdb->prepare("SELECT nickname FROM $this->table_name WHERE chat_id=?");
+            $check->execute([$this->chat_id]);
+            $check = $check->fetch(\PDO::FETCH_ASSOC);
+            $nick = $check['nickname'];
+            $check = $this->mdb->prepare("INSERT INTO $this->shoptable_name (codice, nome, prezzo, qty, attivo, in_data, creato_da) VALUES (?,?,?,?,?,?,?)");
+            $check->execute([$codice, $nome, $prezzo, $qty, 'true', $data, $nick]);
+            $this->sendMessage($this->chat_id, "📈 Nuovo VIP/pacchetto creato:\n\nCodice:  <code>$codice</code>\nPrezzo:  <code>$prezzo</code>\nQuantità:  <code>$qty</code>\nNome:  <code>$nome</code>\nData:  <code>$data</code>\nCreato da:  <code>$nick</code>");
+            //$this->sendMessage(-1001293327695, "📈 Nuovo VIP/pacchetto creato:\n\nCodice:  <code>$codice</code>\nPrezzo:  <code>$prezzo</code>\nQuantità:  <code>$qty</code>\nNome:  <code>$nome</code>\nData:  <code>$data</code>\nCreato da:  <code>$nick</code>");
+            $this->sendMessage(-1001293009113, "📈 Nuovo VIP/pacchetto creato:\n\nCodice:  <code>$codice</code>\nPrezzo:  <code>$prezzo</code>\nQuantità:  <code>$qty</code>\nNome:  <code>$nome</code>\nData:  <code>$data</code>\nCreato da:  <code>$nick</code>");
+        }
+    }
+
+
+
 
 }
